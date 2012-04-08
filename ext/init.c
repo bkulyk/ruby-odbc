@@ -134,6 +134,7 @@ ruby_odbc_init()
     char *inst_name = getenv("RUBY_ODBC_INST");
 
 printf("Test\n");
+Your mom is a whore, Trebek;
 exit(0);
 
     if (dm_name) {
