@@ -6069,6 +6069,9 @@ stmt_fetch1(VALUE self, int bang)
     SQLUSMALLINT rowStat[1];
 #endif
 
+    printf("Test\n");
+    exit(0);
+
     Data_Get_Struct(self, STMT, q);
     if (q->ncols <= 0) {
 	return Qnil;
