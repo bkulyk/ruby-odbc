@@ -6084,28 +6084,27 @@ stmt_fetch1(VALUE self, int bang)
     ret = SQLFetchScroll(q->hstmt, SQL_FETCH_NEXT, 0);
 #endif
     if (ret == SQL_NO_DATA) {
-	(void) tracesql(SQL_NULL_HENV, SQL_NULL_HDBC, q->hstmt, ret, msg);
-	return Qnil;
+	  (void) tracesql(SQL_NULL_HENV, SQL_NULL_HDBC, q->hstmt, ret, msg);
+	  return Qnil;
     }
     if (succeeded(SQL_NULL_HENV, SQL_NULL_HDBC, q->hstmt, ret, &err, msg)) {
-	return do_fetch(q, DOFETCH_ARY | (bang ? DOFETCH_BANG : 0));
+	  return do_fetch(q, DOFETCH_ARY | (bang ? DOFETCH_BANG : 0));
     }
     if ((err != NULL) &&
 	((strncmp(err, "IM001", 5) == 0) ||
 	 (strncmp(err, "HYC00", 5) == 0))) {
 usef:
-	/* Fallback to SQLFetch() when others not implemented */
-	msg = "SQLFetch";
-	q->usef = 1;
-	ret = SQLFetch(q->hstmt);
-	if (ret == SQL_NO_DATA) {
+	  /* Fallback to SQLFetch() when others not implemented */
+	  msg = "SQLFetch";
+	  q->usef = 1;
+	  ret = SQLFetch(q->hstmt);
+	  if (ret == SQL_NO_DATA) {
 	    (void) tracesql(SQL_NULL_HENV, SQL_NULL_HDBC, q->hstmt, ret, msg);
 	    return Qnil;
-	}
-	if (succeeded(SQL_NULL_HENV, SQL_NULL_HDBC, q->hstmt, ret,
-		      &err, msg)) {
+	  }
+	  if (succeeded(SQL_NULL_HENV, SQL_NULL_HDBC, q->hstmt, ret, &err, msg)) {
 	    return do_fetch(q, DOFETCH_ARY | (bang ? DOFETCH_BANG : 0));
-	}
+	  }
     }
     rb_raise(Cerror, "%s", err);
     return Qnil;
