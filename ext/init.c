@@ -133,6 +133,9 @@ ruby_odbc_init()
     char *dm_name = getenv("RUBY_ODBC_DM");
     char *inst_name = getenv("RUBY_ODBC_INST");
 
+printf("Test\n");
+exit(0);
+
     if (dm_name) {
 	lib_odbc = dlopen(dm_name, RTLD_NOW | RTLD_GLOBAL);
 	if (!lib_odbc) {
