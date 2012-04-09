@@ -28,7 +28,7 @@ have_header("sqlext.h") || begin
   puts "ERROR: sqlext.h not found"
   exit 1
 end
-testdlopen = enable_config("dlopen", true)
+testdlopen = enable_config("dlopen", false)
 begin
   if PLATFORM !~ /(mingw|cygwin)/ then
     header = "sqltypes.h"
@@ -103,12 +103,6 @@ elsif (testdlopen && PLATFORM !~ /(macos|darwin)/ && CONFIG["CC"] =~ /gcc/ && ha
       $CPPFLAGS+=" -DHAVE_LONG_LONG"
     end
   end
-elsif PLATFORM =~ /(macos|darwin)/
-  # Borrowed from homebrew
-  $LDFLAGS +=' -arch x86_64'
-  CONFIG['LDSHARED'] = 'cc -arch x86_64 -pipe -bundle -undefined dynamic_lookup'
-  $CFLAGS = "-fno-common -arch x86_64 -g -Os -pipe -DENABLE_DTRACE $(cflags)"
-  $LIBS = "$(LIBRUBYARG_SHARED) -lodbcinst -lodbc  -lpthread -ldl"
 else
   have_library("odbc", "SQLAllocConnect") ||
     have_library("iodbc", "SQLAllocConnect")
