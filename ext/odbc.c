@@ -6194,6 +6194,12 @@ do_fetch(STMT *q, int mode)
 				(chunksize + 1) : chunksize,
 #endif
 				&curlen);
+
+		/*Fix for DB2 on 64-bit, which is using the 32-bit string length*/
+		if( curlen == 0xFFFFFFFF ) {
+			curlen = SQL_NULL_DATA;
+		}
+
 		if (rc == SQL_NO_DATA) {
 		    if (curlen == SQL_NO_TOTAL) {
 			curlen = totlen;
@@ -6243,6 +6249,11 @@ do_fetch(STMT *q, int mode)
 			   &msg, "SQLGetData")) {
 		rb_raise(Cerror, "%s", msg);
 	    }
+
+	    /*Fix for DB2 on 64-bit, which is using the 32-bit string length*/
+            if( curlen == 0xFFFFFFFF ) {
+            	curlen = SQL_NULL_DATA;
+            }
 	}
 	if (curlen == SQL_NULL_DATA) {
 	    v = Qnil;
